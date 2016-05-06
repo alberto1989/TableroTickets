@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<html>
+    
+    <head>
+               
+         <title>Proyecto</title>
+   <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="bootstrap/bootstrap.css">
+        <script src="js/jquery-2.2.3.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+      
+        <script src="js/angular.min.js"></script>
+        
+        
+        <script >
+            angular.module('DETLICMO',[]).controller('ctrlDetclimo', function($scope,$http){
+              $scope.Mensajito='Ingrese Nuevo Usuario';
+              $scope.mensaje2='Modifique el usuario que desee';
+              $scope.id;
+              $scope.titulo='';
+              $scope.cuerpo='';
+              
+              var mensaje = {
+                  id:1,
+                  titulo:'',
+                  cuerpo:''
+              };
+          
+              ///var url='http://172.16.10.172:9999';
+            
+              $scope.guardar = function(){
+                  $http.post('http://localhost:9999/mensaje/'+$scope.titulo+'/'+$scope.cuerpo).success(function(json){
+                     $scope.guardado=json; 
+                  });
+                  
+              };
+              
+              
+             $scope.actualizar = function(){
+                  $http.put('http://localhost:9999/mensaje/'+$scope.id+'/'+$scope.titulo+'/'+$scope.cuerpo).success(function(json){
+                     $scope.actualizado=json; 
+                  });
+                  
+              };
+              
+              $scope.buscarTodos=function (){
+               $http.get('http://localhost:9999/Monitor/').success(function (json){
+                   $scope.mensajes=json;
+               
+            });
+        };
+           
+           
+            $scope.borrar=function (){
+                console.log($scope.id);
+               $http.delete('http://localhost:9999/borrar/'+$scope.id).success(function (json){
+                $scope.borrado=json;
+               
+            });
+        };
+           
+          
+            });
+            
+        </script>
+        
+        
+        
+         <script type = "text/javascript">
+             $(function(){
+             $(".close").click(function(){
+             $("#myAlert").alert('close');
+              });
+              });  
+            </script>  
+            
+            
+            
+            
+            
+        
+    </head>
+    <body ng-app="mensaje" style="background-color:#555;color: #ffffff" >
+        
+ 
+    <center>
+        <div ng-controller="ctrlMensaje">
+            <br>
+            <br>
+            <img src="IMG/user.png" alt="..." class="img-circle">
+            <br>
+            <strong> {{Mensajito}}</strong>
+            <br>
+            
+            <form class="form-inline">
+                <div class="form-group">
+               <label for="ejemplodeNombre">Nombre</label>
+                <input type="text" ng-model="titulo" class="form-control" id="ejemplodeNombre" placeholder="Alberto Jaramillo"><br>
+                </div>
+                
+                 <div class="form-group">
+                <label for="ejemplodeEmail">Email</label>
+                <input type="email" ng-model="cuerpo" class="form-control" id="ejemplodeEmail" placeholder="ajaramillo@example.com"><br>
+                </div>
+                
+            <button ng-click="guardar()" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-sm">guardar</button>
+            <strong>{{guardado}}</strong>
+            <br>
+            <br>
+            
+            
+            </form>
+            
+           
+          
+            
+            
+            <strong>{{mensaje2}}</strong>
+            <br>
+             <form class="form-inline">
+                <div class="form-group">
+                <input type="text" ng-model="id" class="form-control" placeholder="Escriba el id"><br>
+                </div>
+                 
+                 <div class="form-group">
+                <input type="text" ng-model="titulo" class="form-control" placeholder="Nombre nuevo"><br>
+                  </div>
+                 <div class="form-group">
+                <input type="email" ng-model="cuerpo" class="form-control" placeholder="Email Nuevo"><br>
+                 </div>
+                
+                
+                
+                 <!-- Small modal -->
+             <button ng-click="actualizar()" class="btn btn-warning" data-toggle="modal" data-target=".bs-example-modal-sm">Actualizar</button>
+
+            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content" style="background: #555">
+            <p style="color: #ffffff"> {{actualizado}}  </p>
+        
+            <p style="color: #ffffff"> Realice otra operacion!!!</p>
+           
+           <img src="IMG/Success.png" alt="..." class="img-circle">
+            </div>
+            </div>
+            </div>
+                
+                
+             </form
+             
+            
+             <br>
+             <br>
+                
+            
+            <!-- Large modal -->
+            <button ng-click="buscarTodos()" class="btn btn-info" data-toggle="modal" data-target=".bs-example-modal-lg">Buscar Todos</button>
+
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+                <div class="modal-dialog modal-lg" style="width:800px;">
+            <div class="modal-content" style="background: #555">
+                <h4><p style="color: #ffffff"> Usuarios Guardados</p></h4>
+                <img src="IMG/user2.png" alt="..." class="img-circle">
+             <table class="table table-striped" style="background: #2aabd2;color: #ffffff">
+            <thead>
+                <tr>
+            <th>Id</th>
+            <th>Titulo</th>
+            <th>Cuerpo</th>
+      
+            </tr>
+            </thead>
+            <tbody>
+                <tr class="success"  ng-repeat="men in mensajes">
+               <td style="background: #245269 ">{{men.id}}</td>
+                <td style="background: #245269">{{men.titulo}}</td>
+                <td style="background: #245269 ">{{men.cuerpo}}</td>
+                
+       
+             </tr>
+     
+     
+            </tbody>
+            </table>
+             </div>
+            </div>
+            </div>
+
+            
+            <br> 
+            <br>
+            
+            <form class="form-inline">
+                <div class="form-group">
+                <input type="text" ng-model="id" class="form-control" placeholder="Escriba el id"><br>
+                </div>
+                 
+                           
+                
+                <!-- Small modal -->
+                <button ng-click="borrar()" class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm">Borrar</button>
+                 <div class="modal-dialog modal-sm"><strong>{{borrado}}</strong>
+                 </div>
+        
+        
+            </form>
+            
+        
+          
+        </div>
+    </center>
+    </body>
+</html>
